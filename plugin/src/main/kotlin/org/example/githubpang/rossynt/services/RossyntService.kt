@@ -1,12 +1,12 @@
 package org.example.githubpang.rossynt.services
 
 import com.google.common.collect.ImmutableMap
+import com.google.errorprone.annotations.Immutable
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.EditorFactory
-import com.intellij.openapi.editor.event.DocumentEvent
-import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.editor.event.*
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
@@ -22,7 +22,6 @@ import org.example.githubpang.rossynt.events.TextEventThrottler
 import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
-import javax.annotation.concurrent.Immutable
 import kotlin.coroutines.EmptyCoroutineContext
 
 @Service
@@ -189,6 +188,15 @@ internal class RossyntService : Disposable {
                 }
             }
         }, this)
+
+        // Automatically focus the selected text in the syntax visualizer - similar to how it works in VS
+        EditorFactory.getInstance().eventMulticaster.addCaretListener(object : CaretListener {
+            override fun caretPositionChanged(event: CaretEvent) {
+                super.caretPositionChanged(event)
+                this@RossyntService.findNodeAtCaret()
+            }
+        }, this)
+
         textEventThrottler.setCallback(object : ITextEventThrottlerCallback {
             override fun onTextEvent(text: String) {
                 val file = FileEditorManager.getInstance(project).selectedEditor?.file
