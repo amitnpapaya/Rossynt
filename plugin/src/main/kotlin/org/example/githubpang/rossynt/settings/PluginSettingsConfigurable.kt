@@ -21,14 +21,17 @@ internal class PluginSettingsConfigurable : Configurable {
 
     override fun isModified(): Boolean {
         return ui?.dotNetPath != PluginSettingsData.instance.dotNetPath
+            || ui?.automaticallyFollowCaret != PluginSettingsData.instance.automaticallyFollowCaret
     }
 
     override fun apply() {
         PluginSettingsData.instance.dotNetPath = ui?.dotNetPath
+        PluginSettingsData.instance.automaticallyFollowCaret = ui?.automaticallyFollowCaret
     }
 
     override fun reset() {
         ui?.dotNetPath = PluginSettingsData.instance.dotNetPath
+        ui?.automaticallyFollowCaret = PluginSettingsData.instance.automaticallyFollowCaret
     }
 
     override fun getDisplayName(): String {

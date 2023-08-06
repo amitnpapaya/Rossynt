@@ -29,6 +29,23 @@ internal class PluginSettingsData : PersistentStateComponent<PluginSettingsData?
             }
         }
 
+    var automaticallyFollowCaret: Boolean? = false
+        set(value) {
+            if (field == value) {
+                return
+            }
+            field = value
+
+            ApplicationManager.getApplication().invokeLater {
+                if (this@PluginSettingsData == instance) {
+                    // Publish message.
+                    val messageBus = ApplicationManager.getApplication()?.messageBus
+                    val publisher = messageBus?.syncPublisher(PluginSettingsNotifier.TOPIC)
+                    publisher?.pluginSettingsUpdated()
+                }
+            }
+        }
+
     // ******************************************************************************** //
 
     override fun getState(): PluginSettingsData = this

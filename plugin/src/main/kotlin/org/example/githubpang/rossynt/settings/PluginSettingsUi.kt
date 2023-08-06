@@ -2,6 +2,7 @@ package org.example.githubpang.rossynt.settings
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBRadioButton
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.Cell
@@ -15,6 +16,7 @@ internal class PluginSettingsUi {
     private val radioButtonDotNetPathAutomatic: JBRadioButton
     private val radioButtonDotNetPathCustom: JBRadioButton
     private val textFieldDotNetPath: TextFieldWithBrowseButton
+    private val checkBoxAutomaticallyFollowCaret: JBCheckBox
 
     // ******************************************************************************** //
 
@@ -23,6 +25,7 @@ internal class PluginSettingsUi {
         var radioButtonDotNetPathCustomCell: Cell<JBRadioButton>? = null
         var radioButtonDotNetPathCustom: JBRadioButton? = null
         var textFieldDotNetPath: TextFieldWithBrowseButton? = null
+        var checkBoxAutomaticallyFollowCaret: JBCheckBox? = null;
 
         rootComponent = panel {
             buttonsGroup {
@@ -47,11 +50,15 @@ internal class PluginSettingsUi {
                     }
                 }
             }
+            row {
+                checkBoxAutomaticallyFollowCaret = checkBox("Automatically follow Caret").component
+            }
         }
 
         this@PluginSettingsUi.radioButtonDotNetPathAutomatic = radioButtonDotNetPathAutomatic ?: throw IllegalStateException()
         this@PluginSettingsUi.radioButtonDotNetPathCustom = radioButtonDotNetPathCustom ?: throw IllegalStateException()
         this@PluginSettingsUi.textFieldDotNetPath = textFieldDotNetPath ?: throw IllegalStateException()
+        this@PluginSettingsUi.checkBoxAutomaticallyFollowCaret = checkBoxAutomaticallyFollowCaret ?: throw IllegalStateException()
     }
 
     var dotNetPath: String?
@@ -64,5 +71,16 @@ internal class PluginSettingsUi {
             radioButtonDotNetPathAutomatic.isSelected = value == null
             radioButtonDotNetPathCustom.isSelected = value != null
             textFieldDotNetPath.text = value ?: ""
+        }
+
+    var automaticallyFollowCaret: Boolean?
+        get(){
+            return checkBoxAutomaticallyFollowCaret.isSelected
+        }
+        set(value){
+            if (value == null)
+                checkBoxAutomaticallyFollowCaret.isSelected = false
+            else
+                checkBoxAutomaticallyFollowCaret.isSelected = value
         }
 }

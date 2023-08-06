@@ -19,6 +19,7 @@ import kotlinx.coroutines.*
 import org.example.githubpang.rossynt.RossyntToolWindowStateNotifier
 import org.example.githubpang.rossynt.events.ITextEventThrottlerCallback
 import org.example.githubpang.rossynt.events.TextEventThrottler
+import org.example.githubpang.rossynt.settings.PluginSettingsData
 import org.example.githubpang.rossynt.settings.PluginSettingsNotifier
 import org.example.githubpang.rossynt.trees.TreeNode
 import java.util.*
@@ -193,7 +194,8 @@ internal class RossyntService : Disposable {
         EditorFactory.getInstance().eventMulticaster.addCaretListener(object : CaretListener {
             override fun caretPositionChanged(event: CaretEvent) {
                 super.caretPositionChanged(event)
-                this@RossyntService.findNodeAtCaret()
+                if (PluginSettingsData.instance.automaticallyFollowCaret == true)
+                    this@RossyntService.findNodeAtCaret()
             }
         }, this)
 

@@ -71,6 +71,7 @@ internal class BackendService : IBackendService {
     private var delegate: IBackendServiceDelegate? = null
     private var backendJob: Job? = null
     private var dotNetPath: String? = null
+    private var automaticallyFollowCaret: Boolean? = null
     private var backendRuntimeVersion: BackendRuntimeVersion? = null
     private var deployPath: Path? = null
     private var backendProcess: Process? = null
@@ -114,6 +115,8 @@ internal class BackendService : IBackendService {
         try {
             // Find dot net path.
             dotNetPath = findDotNetPath()
+            automaticallyFollowCaret = getFollowCaret()
+
             LOGGER.info("Found dot net path: $dotNetPath")
 
             // Get backend runtime version.
@@ -213,6 +216,10 @@ internal class BackendService : IBackendService {
 
     private fun findDotNetPath(): String {
         return PluginSettingsData.instance.dotNetPath ?: autoFindDotNetPath()
+    }
+
+    private fun getFollowCaret(): Boolean? {
+        return PluginSettingsData.instance.automaticallyFollowCaret
     }
 
     private fun autoFindDotNetPath(): String {
