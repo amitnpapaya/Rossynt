@@ -12,14 +12,15 @@ rm -rf "${TARGET_PATH}"
 docker build --tag "${IMAGE_NAME}" . || exit $?
 
 # Copy artifacts to target path.
-mkdir --parents "${TARGET_PATH}"
-docker container rm "${CONTAINER_NAME}"
+mkdir -p "${TARGET_PATH}"
+
+docker container rm "${CONTAINER_NAME}" || true
 docker container create --name "${CONTAINER_NAME}" "${IMAGE_NAME}" || exit $?
 docker container cp "${CONTAINER_NAME}":/app/. "${TARGET_PATH}" || exit $?
 docker container rm "${CONTAINER_NAME}" || exit $?
 
 # Delete the executables (we only need the DLLs).
-rm --verbose "${TARGET_PATH}"/*/RossyntBackend
+rm -v "${TARGET_PATH}"/*/RossyntBackend
 
 # Generate file lists.
 for DIRECTORY in "${TARGET_PATH}"/* ; do

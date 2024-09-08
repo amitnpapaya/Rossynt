@@ -145,6 +145,10 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
             return isHighlightSelectedTreeNode
         }
 
+        override fun getActionUpdateThread(): ActionUpdateThread {
+            return ActionUpdateThread.EDT // or BGT if this action involves background processing
+        }
+
         override fun setSelected(e: AnActionEvent, state: Boolean) {
             if (isHighlightSelectedTreeNode == state) {
                 return
@@ -166,12 +170,20 @@ internal class RossyntToolWindow(private val project: Project, toolWindow: ToolW
         override fun actionPerformed(e: AnActionEvent) {
             rossyntService.findNodeAtCaret()
         }
+
+        override fun getActionUpdateThread(): ActionUpdateThread {
+            return ActionUpdateThread.EDT
+        }
     }
 
     private inner class CSharpVersionChooserAction : ComboBoxAction(), DumbAware {
         private inner class CSharpVersionAction(val cSharpVersion: CSharpVersion) : AnAction(cSharpVersion.name) {
             override fun actionPerformed(e: AnActionEvent) {
                 rossyntService.setCSharpVersion(cSharpVersion)
+            }
+
+            override fun getActionUpdateThread(): ActionUpdateThread {
+                return ActionUpdateThread.EDT // or BGT if this action involves background processing
             }
         }
 
