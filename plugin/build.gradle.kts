@@ -33,6 +33,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:2.2.1")
     implementation("io.ktor:ktor-client-gson:2.2.1")
     implementation("io.ktor:ktor-serialization-gson:2.2.1")
+    implementation ("com.google.errorprone:error_prone_core:2.18.0")
 }
 
 // Set the JVM language level used to build the project. Use Java 11 for 2020.3+, and Java 17 for 2022.2+.
